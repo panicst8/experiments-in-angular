@@ -6,10 +6,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './shared/modules/material/material.module';
 
 import { AppComponent } from './app.component';
+import { DynoComponent } from './shared/components/dyno/dyno.component';
 
 @NgModule({
-   declarations: [AppComponent],
-   entryComponents: [],
+   declarations: [AppComponent, DynoComponent],
+   entryComponents: [DynoComponent],
    imports: [BrowserModule, BrowserAnimationsModule, MaterialModule],
    providers: [],
    bootstrap: [AppComponent],
