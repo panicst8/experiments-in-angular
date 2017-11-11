@@ -1,0 +1,133 @@
+{
+	"myData": [{
+			"buttonType": "toggle",
+			"isVertical": false,
+			"buttons": [{
+					"text": "Left",
+					"textPosition": "center",
+					"value": "left",
+					"buttonType": "child",
+					"action": "DISPATCH",
+					"payload": "FORMAT_ALIGN_LEFT",
+					"debounceTime": 0
+				},
+				{
+					"text": "Center",
+					"textPosition": "center",
+					"value": "center",
+					"buttonType": "child",
+					"action": "DISPATCH",
+					"payload": "FORMAT_ALIGN_CENTER",
+					"debounceTime": 0
+				},
+				{
+					"text": "Right",
+					"textPosition": "center",
+					"value": "right",
+					"buttonType": "child",
+					"action": "DISPATCH",
+					"payload": "FORMAT_ALIGN_RIGHT",
+					"debounceTime": 0
+				},
+				{
+					"text": "Justify",
+					"textPosition": "center",
+					"value": "justify",
+					"buttonType": "child",
+					"action": "DISPATCH",
+					"payload": "FORMAT_ALIGN_JUSTIFY",
+					"debounceTime": 0
+				}
+			]
+		},
+		{
+			"buttonType": "toggle",
+			"isVertical": true,
+			"buttons": [{
+					"value": "left",
+					"icon": {
+						"name": "format_align_left"
+					},
+					"buttonType": "child",
+					"action": "DISPATCH",
+					"payload": "FORMAT_ALIGN_LEFT",
+					"debounceTime": 0
+				},
+				{
+					"value": "center",
+					"icon": {
+						"name": "format_align_center"
+					},
+					"buttonType": "child",
+					"action": "DISPATCH",
+					"payload": "FORMAT_ALIGN_CENTER",
+					"debounceTime": 0
+				},
+				{
+					"value": "right",
+					"icon": {
+						"name": "format_align_right"
+					},
+					"buttonType": "child",
+					"action": "DISPATCH",
+					"payload": "FORMAT_ALIGN_RIGHT",
+					"debounceTime": 0
+				},
+				{
+					"value": "justify",
+					"icon": {
+						"name": "format_align_justify"
+					},
+					"buttonType": "child",
+					"action": "DISPATCH",
+					"payload": "FORMAT_ALIGN_JUSTIFY",
+					"debounceTime": 0
+				}
+			]
+		},
+		{
+			"name": "change_history",
+			"buttonType": "miniFab",
+			"action": "Do the thing.",
+			"buttonColor": "primary",
+			"debounceTime": 0
+		},
+		{
+			"name": "watch_later",
+			"buttonType": "iconButton",
+			"buttonColor": "accent",
+			"action": "Do the thing.",
+			"debounceTime": 0
+		},
+		{
+			"name": "home",
+			"buttonType": "fab",
+			"buttonColor": "primary",
+			"action": "go home?",
+			"debounceTime": 200
+		},
+		{
+			"name": "cloud_download",
+			"buttonType": "fab",
+			"buttonColor": "primary",
+			"action": "go home?",
+			"buttonDisabled": true,
+			"debounceTime": 200
+		},
+		{
+			"name": "3d_rotation",
+			"buttonType": "raised",
+			"buttonColor": "warn",
+			"action": "flippity do",
+			"debounceTime": 1000
+		},
+		{
+			"name": "help",
+			"buttonType": "basic",
+			"buttonColor": "warn",
+			"action": "get help.",
+			"debounceTime": 2000
+		}
+	]
+}
+

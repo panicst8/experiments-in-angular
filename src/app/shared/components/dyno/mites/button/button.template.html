@@ -1,0 +1,29 @@
+<mat-button-toggle-group [vertical]="data.isVertical" #group="matButtonToggleGroup" *ngIf="data.buttonType == buttonTypes.toggle">
+
+   <mat-button-toggle (click)="clicks.next($event, buttonData)" *ngFor="let buttonData of data.buttons">
+      <span *ngIf="buttonData.text && buttonData.textPosition == 'left'">{{buttonData.text}}&ngsp;</span>
+      <mat-icon *ngIf="buttonData.icon">{{buttonData.icon.name}}</mat-icon>
+      <span *ngIf="buttonData.text && buttonData.textPosition == 'right'">&ngsp;{{buttonData.text}}</span>
+      <span *ngIf="buttonData.text && buttonData.textPosition == 'center'">{{buttonData.text}}</span>
+   </mat-button-toggle>
+
+</mat-button-toggle-group>
+
+<button mat-fab color="{{data.buttonColor}}" [disabled]="data.buttonDisabled" [style.cursor]="data.buttonCursor" (click)="clicks.next({event: $event, data: data})"
+   *ngIf="data.buttonType == buttonTypes.fab">
+   <mat-icon>{{data.name}}</mat-icon>
+</button>
+
+<button mat-mini-fab color="{{data.buttonColor}}" (click)="clicks.next($event)" *ngIf="data.buttonType == buttonTypes.miniFab">
+   <mat-icon>{{data.name}}</mat-icon>
+</button>
+
+<button mat-raised-button color="{{data.buttonColor}}" (click)="clicks.next($event)" *ngIf="data.buttonType == buttonTypes.raised">
+   <mat-icon>{{data.name}}</mat-icon>
+</button>
+
+<button mat-icon-button color="{{data.buttonColor}}" (click)="clicks.next($event)" *ngIf="data.buttonType == buttonTypes.iconButton">
+   <mat-icon>{{data.name}}</mat-icon>
+</button>
+
+<button mat-button color="{{data.buttonColor}}" (click)="clicks.next($event)" *ngIf="data.buttonType == buttonTypes.basic">{{data.name}}</button>

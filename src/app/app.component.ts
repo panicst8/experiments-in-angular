@@ -16,9 +16,14 @@ import {
   AfterContentInit,
 } from '@angular/core';
 
+import { HttpClient } from '@angular/common/http';
+
 import { DynoComponent } from './shared/components/dyno/dyno.component';
 import { ButtonInterface } from './shared/components/dyno/mites/button/button.interface';
-// import { ButtonTypes, ButtonColors, IconConfig, } from './shared/components/dyno/mites/button/button.interface';
+import {
+  ButtonTypes,
+  ButtonColors,
+} from './shared/components/dyno/mites/button/button.enum';
 
 @Component({
   selector: 'app-root',
@@ -27,18 +32,25 @@ import { ButtonInterface } from './shared/components/dyno/mites/button/button.in
 })
 export class AppComponent implements OnInit {
   myButtons: ButtonInterface[];
+  results = '';
 
-  ngOnInit() {
+  constructor(private http: HttpClient) {}
+
+  ngOnInit(): void {
+    this.http.get('http://localhost:3000/myData').subscribe(data => {
+      console.log(data);
+    });
+
     this.myButtons = [
       {
-        buttonType: 'toggle',
+        buttonType: ButtonTypes.toggle,
         isVertical: false,
         buttons: [
           {
             text: 'Left',
             textPosition: 'center',
             value: 'left',
-            buttonType: 'child',
+            buttonType: ButtonTypes.child,
             action: 'DISPATCH',
             payload: 'FORMAT_ALIGN_LEFT',
             debounceTime: 0,
@@ -47,7 +59,7 @@ export class AppComponent implements OnInit {
             text: 'Center',
             textPosition: 'center',
             value: 'center',
-            buttonType: 'child',
+            buttonType: ButtonTypes.child,
             action: 'DISPATCH',
             payload: 'FORMAT_ALIGN_CENTER',
             debounceTime: 0,
@@ -56,7 +68,7 @@ export class AppComponent implements OnInit {
             text: 'Right',
             textPosition: 'center',
             value: 'right',
-            buttonType: 'child',
+            buttonType: ButtonTypes.child,
             action: 'DISPATCH',
             payload: 'FORMAT_ALIGN_RIGHT',
             debounceTime: 0,
@@ -65,7 +77,7 @@ export class AppComponent implements OnInit {
             text: 'Justify',
             textPosition: 'center',
             value: 'justify',
-            buttonType: 'child',
+            buttonType: ButtonTypes.child,
             action: 'DISPATCH',
             payload: 'FORMAT_ALIGN_JUSTIFY',
             debounceTime: 0,
@@ -73,7 +85,7 @@ export class AppComponent implements OnInit {
         ],
       },
       {
-        buttonType: 'toggle',
+        buttonType: ButtonTypes.toggle,
         isVertical: true,
         buttons: [
           {
@@ -81,7 +93,7 @@ export class AppComponent implements OnInit {
             icon: {
               name: 'format_align_left',
             },
-            buttonType: 'child',
+            buttonType: ButtonTypes.child,
             action: 'DISPATCH',
             payload: 'FORMAT_ALIGN_LEFT',
             debounceTime: 0,
@@ -91,7 +103,7 @@ export class AppComponent implements OnInit {
             icon: {
               name: 'format_align_center',
             },
-            buttonType: 'child',
+            buttonType: ButtonTypes.child,
             action: 'DISPATCH',
             payload: 'FORMAT_ALIGN_CENTER',
             debounceTime: 0,
@@ -101,7 +113,7 @@ export class AppComponent implements OnInit {
             icon: {
               name: 'format_align_right',
             },
-            buttonType: 'child',
+            buttonType: ButtonTypes.child,
             action: 'DISPATCH',
             payload: 'FORMAT_ALIGN_RIGHT',
             debounceTime: 0,
@@ -111,7 +123,7 @@ export class AppComponent implements OnInit {
             icon: {
               name: 'format_align_justify',
             },
-            buttonType: 'child',
+            buttonType: ButtonTypes.child,
             action: 'DISPATCH',
             payload: 'FORMAT_ALIGN_JUSTIFY',
             debounceTime: 0,
@@ -120,44 +132,44 @@ export class AppComponent implements OnInit {
       },
       {
         name: 'change_history',
-        buttonType: 'miniFab', // ButtonTypes.miniFab,
+        buttonType: ButtonTypes.miniFab,
         action: 'Do the thing.',
-        buttonColor: 'primary', // ButtonColors.primary,
+        buttonColor: ButtonColors.primary,
         debounceTime: 0,
       },
       {
         name: 'watch_later',
-        buttonType: 'iconButton',
-        buttonColor: 'accent',
+        buttonType: ButtonTypes.iconButton,
+        buttonColor: ButtonColors.accent,
         action: 'Do the thing.',
         debounceTime: 0,
       },
       {
         name: 'home',
-        buttonColor: 'primary',
-        buttonType: 'fab',
+        buttonType: ButtonTypes.fab,
+        buttonColor: ButtonColors.primary,
         action: 'go home?',
         debounceTime: 200,
       },
       {
         name: 'cloud_download',
-        buttonColor: 'primary',
-        buttonType: 'fab',
+        buttonType: ButtonTypes.fab,
+        buttonColor: ButtonColors.primary,
         action: 'go home?',
         buttonDisabled: true,
         debounceTime: 200,
       },
       {
         name: '3d_rotation',
-        buttonType: 'raised',
-        buttonColor: 'warn',
+        buttonType: ButtonTypes.raised,
+        buttonColor: ButtonColors.warn,
         action: 'flippity do',
         debounceTime: 1000,
       },
       {
         name: 'help',
-        buttonType: 'basic',
-        buttonColor: 'warn',
+        buttonType: ButtonTypes.basic,
+        buttonColor: ButtonColors.warn,
         action: 'get help.',
         debounceTime: 2000,
       },

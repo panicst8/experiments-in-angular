@@ -45,7 +45,7 @@ export class DynoComponent implements OnInit, OnDestroy, AfterContentInit {
   }
 
   ngOnInit() {
-    console.log(this.data);
+    console.log(JSON.stringify(this.data));
     this.data.forEach(x => {
       this.createComponent(x);
     });
