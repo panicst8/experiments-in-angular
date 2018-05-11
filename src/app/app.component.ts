@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
     this.myButtons = [
       {
         buttonType: ButtonTypes.toggle,
-        isVertical: false,
+        isVertical: true,
         buttons: [
           {
             text: 'Left',
@@ -86,7 +86,7 @@ export class AppComponent implements OnInit {
       },
       {
         buttonType: ButtonTypes.toggle,
-        isVertical: true,
+        isVertical: false,
         buttons: [
           {
             value: 'left',
