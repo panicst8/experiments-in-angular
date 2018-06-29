@@ -19,16 +19,9 @@ import {
 import { ButtonInterface } from './button.interface';
 import { ButtonTypes } from './button.enum';
 
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
-import { range } from 'rxjs/observable/range';
+import { Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 
-// OLD WAY
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/filter';
-import 'rxjs/Rx';
-
-// NEW WAY
 import { map, filter, tap, debounceTime } from 'rxjs/operators';
 
 @Component({
