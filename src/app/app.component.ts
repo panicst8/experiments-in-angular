@@ -14,6 +14,7 @@ import {
   OnInit,
   OnDestroy,
   AfterContentInit,
+  HostListener,
 } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
@@ -24,20 +25,35 @@ import {
   ButtonTypes,
   ButtonColors,
 } from './shared/components/dyno/mites/button/button.enum';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
+  // host: { '(window:keydown)': 'hotkeys($event)' },
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   myButtons: ButtonInterface[];
   results = '';
+  public consoleActive = false;
+
+  @HostListener('window:keyup', ['$event'])
+  onKeyUp(event: KeyboardEvent) {
+    console.log(event.keyCode, event);
+    if (event.ctrlKey && event.altKey && event.keyCode === 220) {
+      this.consoleActive = !this.consoleActive;
+    }
+  }
 
   constructor(private http: HttpClient) {}
 
+  showMessage() {
+    alert('Hotkey Test');
+  }
+
   ngOnInit(): void {
-    this.http.get('http://localhost:3000/myData').subscribe(data => {
+    this.http.get('http://localhost:3000/myData').subscribe((data) => {
       console.log(data);
     });
 

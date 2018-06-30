@@ -9,9 +9,10 @@ import { MaterialModule } from './shared/modules/material/material.module';
 import { AppComponent } from './app.component';
 import { DynoComponent } from './shared/components/dyno/dyno.component';
 import { ButtonComponent } from './shared/components/dyno/mites/button/button.component';
+import { WebCliComponent } from './shared/components/web-cli/web-cli.component';
 
 @NgModule({
-  declarations: [AppComponent, DynoComponent, ButtonComponent],
+  declarations: [AppComponent, DynoComponent, ButtonComponent, WebCliComponent],
   entryComponents: [ButtonComponent],
   imports: [
     BrowserModule,
