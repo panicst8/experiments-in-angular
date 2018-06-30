@@ -26,6 +26,7 @@ import { ButtonComponent } from './mites/button/button.component';
 export class DynoComponent implements OnInit, OnDestroy, AfterContentInit {
   @ViewChild('target', { read: ViewContainerRef })
   container;
+  // tslint:disable-next-line:no-input-rename
   @Input('data') data;
 
   componentRef: ComponentRef<any>;
@@ -41,12 +42,12 @@ export class DynoComponent implements OnInit, OnDestroy, AfterContentInit {
 
     this.componentRef.instance.data = miteConfig;
 
-    this.componentRef.instance.output.subscribe(event => console.log(event));
+    this.componentRef.instance.output.subscribe((event) => console.log(event));
   }
 
   ngOnInit() {
-    console.log(JSON.stringify(this.data));
-    this.data.forEach(x => {
+    // console.log(JSON.stringify(this.data));
+    this.data.forEach((x) => {
       this.createComponent(x);
     });
   }

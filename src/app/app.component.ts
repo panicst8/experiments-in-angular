@@ -15,6 +15,7 @@ import {
   OnDestroy,
   AfterContentInit,
   HostListener,
+  ElementRef,
 } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
@@ -34,15 +35,23 @@ import { BehaviorSubject, Observable } from 'rxjs';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  @ViewChild('webCli') webCli: ElementRef;
   myButtons: ButtonInterface[];
   results = '';
-  public consoleActive = false;
+  public consoleActive = true;
+  focusInput: EventEmitter<boolean> = new EventEmitter();
 
   @HostListener('window:keyup', ['$event'])
   onKeyUp(event: KeyboardEvent) {
-    console.log(event.keyCode, event);
+    // console.log(event.keyCode, event);
     if (event.ctrlKey && event.altKey && event.keyCode === 220) {
       this.consoleActive = !this.consoleActive;
+      if (this.consoleActive) {
+        // console.log(this.webCli.cmdPrompt); //.cmdPrompt.nativeElement.focus();
+        // setTimeout(() => {
+        //   this.webCli.cmdPrompt.nativeElement.focus();
+        // }, 0);
+      }
     }
   }
 
@@ -54,7 +63,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.http.get('http://localhost:3000/myData').subscribe((data) => {
-      console.log(data);
+      // console.log(data);
     });
 
     this.myButtons = [
