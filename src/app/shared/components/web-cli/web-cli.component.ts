@@ -43,24 +43,53 @@ export class WebCliComponent implements OnInit {
     this.showGreeting();
   }
 
-  executeCommand(event) {
+  readyCommand(event) {
     const command = event.target.value.trim();
-    // this.writeHTML('<p>Boom!</p>');
     this.cmdOffSet(-42);
     this.cmdPromptControls('clear');
     this.writeLine(command, 'cmd');
-    if (!command) {
+
+    if (command === '') {
       return;
     }
+
     this.history.push(command);
+
+    const tokens = command.split(' ');
+    const cmd = tokens.shift().toUpperCase();
+    this.executeCommand(cmd, tokens);
+  }
+
+  executeCommand(cmd, tokens) {
+    switch (cmd) {
+      case 'CLS':
+        this.CLS();
+        break;
+    }
+  }
+
+  // commands
+  CLS() {
+    this.cmdPromptOutputDivElement.nativeElement.innerHTML = '';
   }
 
   browseHistory(adjustment) {
-    this.cmdOffSet(adjustment);
-    if (this.cmdOffSet() === 5) {
-      this.cmdOffSet();
+    if (adjustment + this.cmdOffSet() === 0) {
+      this.cmdOffSet(adjustment);
+      this.cmdPromptControls('clear');
+      return;
+    } else if (this.cmdOffSet() + adjustment > this.history.length) {
+      return;
+    } else if (this.cmdOffSet() + adjustment < 1) {
+      this.cmdPromptControls('clear');
+      return;
     }
-    console.log(this.cmdOffSet());
+
+    this.cmdOffSet(adjustment);
+
+    this.cmdPromptElement.nativeElement.value = this.history[
+      this.history.length - this.cmdOffSet()
+    ];
   }
 
   cmdPromptControls(action) {
