@@ -1,4 +1,5 @@
 <div class="webCli" (click)="cmdPrompt.focus()">
   <input #cmdPrompt (keyup.enter)="executeCommand($event)" class="webCli-input" spellcheck="false">
-  <div #cmdPromptOutputDiv class="webCli-output" innerHtml="{{cmdOutputHtml}}"></div>
+  <div #cmdPromptOutputDiv class="webCli-output" innerHtml="{{cmdOutputHtml}}">
+  </div>
 </div>

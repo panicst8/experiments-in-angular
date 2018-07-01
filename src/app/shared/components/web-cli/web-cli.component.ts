@@ -3,10 +3,9 @@ import {
   OnInit,
   ViewChild,
   Input,
-  EventEmitter,
   ElementRef,
+  Renderer2,
 } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-web-cli',
@@ -16,9 +15,6 @@ import { BehaviorSubject } from 'rxjs';
 export class WebCliComponent implements OnInit {
   @ViewChild('cmdPrompt') cmdPromptElement: ElementRef;
   @ViewChild('cmdPromptOutputDiv') cmdPromptOutputDivElement: ElementRef;
-
-  public cmdOutputHtml = '';
-
   @Input() consoleActive;
 
   // This is what allows parent to focus input -- prob see if hide show can trigger this
@@ -26,18 +22,36 @@ export class WebCliComponent implements OnInit {
   set setProp(p: boolean) {
     console.log(p);
     setTimeout(() => {
-      this.cmdPromptElement.nativeElement.focus();
+      this.focus();
     }, 0);
   }
 
-  constructor() {}
+  constructor(private el: ElementRef, private _renderer: Renderer2) {}
+
+  ngOnInit() {}
 
   executeCommand(event) {
-    console.log('Execute: ', event.target.value);
-    // console.log(this.cmdOutputElement.nativeElement); // .innerHtml = `<span>${ event.target.value }</span>`;
-    this.cmdOutputHtml += `<br> ${event.target.value}`;
+    this.writeLine(event.target.value);
+  }
+
+  focus() {
+    this.cmdPromptElement.nativeElement.focus();
+  }
+
+  scrollToBottom() {
     this.cmdPromptOutputDivElement.nativeElement.scrollTop = this.cmdPromptOutputDivElement.nativeElement.scrollHeight;
   }
 
-  ngOnInit() {}
+  newLine() {
+    const newLine = document.createElement('br');
+    this.cmdPromptOutputDivElement.nativeElement.appendChild(newLine);
+  }
+
+  writeLine(txt, cssSuffix = 'ok') {
+    const span = document.createElement('span');
+    span.className = `webCli-${cssSuffix}`;
+    span.innerText = txt;
+    this.cmdPromptOutputDivElement.nativeElement.appendChild(span);
+    this.newLine();
+  }
 }
