@@ -47,7 +47,8 @@ export class WebCliComponent implements OnInit {
     const command = event.target.value.trim();
     this.cmdOffSet(-42);
     this.cmdPromptControls('clear');
-    this.writeLine(command, 'cmd');
+    // this.writeLine(command, 'cmd');
+    this.writeLine(command, 'input');
 
     if (command === '') {
       return;
