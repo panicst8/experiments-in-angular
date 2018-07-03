@@ -1,5 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { NgxsModule } from '@ngxs/store';
+
 import { HttpClientModule } from '@angular/common/http';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -19,6 +21,7 @@ import { WebCliComponent } from './shared/components/web-cli/web-cli.component';
     BrowserAnimationsModule,
     MaterialModule,
     HttpClientModule,
+    NgxsModule.forRoot([]),
   ],
   providers: [],
   bootstrap: [AppComponent],

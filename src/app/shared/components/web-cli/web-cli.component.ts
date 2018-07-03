@@ -36,6 +36,11 @@ export class WebCliComponent implements OnInit {
       return offset;
     };
   })();
+  private validCommands = new Set(['CLS', 'CLEAR', 'ENV', 'IMG', 'VIDEO']);
+
+  private logStyle = function(cmd) {
+    return this.validCommands.has(cmd) ? 'cmd' : 'ok';
+  };
 
   constructor(private el: ElementRef, private _renderer: Renderer2) {}
 
@@ -47,8 +52,8 @@ export class WebCliComponent implements OnInit {
     const command = event.target.value.trim();
     this.cmdOffSet(-42);
     this.cmdPromptControls('clear');
-    // this.writeLine(command, 'cmd');
-    this.writeLine(command, 'input');
+    this.writeLine(command, this.logStyle(command));
+    // this.writeLine(command, 'input');
 
     if (command === '') {
       return;
@@ -56,15 +61,39 @@ export class WebCliComponent implements OnInit {
 
     this.history.push(command);
 
-    const tokens = command.split(' ');
+    const tokens = this.getArgs(command);
+
+    // const tokens = command.split(' ');
     const cmd = tokens.shift().toUpperCase();
     this.executeCommand(cmd, tokens);
+  }
+
+  getArgs(cmdLine) {
+    const tokenEx = /[^\s"]+|"[^"]*"/g;
+    const quoteEx = /"/g;
+    const args = cmdLine.match(tokenEx);
+
+    // Remove any quotes that may be in the args
+    for (let i = 0; i < args.length; i++) {
+      args[i] = args[i].replace(quoteEx, '');
+    }
+    return args;
   }
 
   executeCommand(cmd, tokens) {
     switch (cmd) {
       case 'CLS':
+      case 'CLEAR':
         this.CLS();
+        break;
+      case 'ENV':
+        this.ENV();
+        break;
+      case 'IMG':
+        this.IMG();
+        break;
+      case 'VIDEO':
+        this.VIDEO();
         break;
     }
   }
@@ -72,6 +101,24 @@ export class WebCliComponent implements OnInit {
   // commands
   CLS() {
     this.cmdPromptOutputDivElement.nativeElement.innerHTML = '';
+  }
+
+  IMG() {
+    this.writeHTML(
+      `<img height='200px' width='250px'
+       src="https://ip1gh35mejw4dpqjl4aya71p-wpengine.netdna-ssl.com/wp-content/uploads/2016/02/analytics-meme-sword-guy.png"/>`,
+    );
+  }
+
+  VIDEO() {
+    this.writeHTML(
+      `<iframe width="560" height="315" src="https://www.youtube.com/embed/hyC_3HHz13I" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`,
+    );
+  }
+
+  ENV() {
+    console.log(window);
+    this.cmdPromptOutputDivElement.nativeElement.innerHTML = this;
   }
 
   browseHistory(adjustment) {

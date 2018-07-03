@@ -32,12 +32,14 @@
   display: none;
 }
 
-.webCli-cmd {
-  color: #aaa !important;
-}
-.webCli-error {
-  color: #f00;
-}
-.webCli-ok {
-  color: #0ff;
+:host /deep/ {
+  .webCli-cmd {
+    color: #aaa !important;
+  }
+  .webCli-error {
+    color: #f00;
+  }
+  .webCli-ok {
+    color: #0ff;
+  }
 }
