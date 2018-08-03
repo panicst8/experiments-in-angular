@@ -1,5 +1,7 @@
-<div class="webCli" (click)="cmdPrompt.focus()">
-  <div #cmdPromptOutputDiv class="webCli-output"></div>
-  <input #cmdPrompt (keyup.arrowup)="browseHistory(+1)" (keyup.arrowdown)="browseHistory(-1);" (keyup.enter)="readyCommand($event)"
-    class="webCli-input" spellcheck="false">
+<div #cmdPrompt tabindex="0" class="webCli" (keydown)="otherKey($event)">
+  <pre><div #cmdPromptOutputDiv class="webCli-output"></div></pre>
+  <div>
+    <pre><span class="PROMPT1">$</span> <span #fakeInput class="webCli-span"></span><span class="cursor"> </span>
+    </pre>
+  </div>
 </div>
