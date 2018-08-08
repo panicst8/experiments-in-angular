@@ -1,7 +1,10 @@
-.PROMPT1 {
-  font-weight: bold;
-  color: yellow;
+:host /deep/ {
+  .PROMPT1 {
+    -fontweight: bold;
+    color: yellow;
+  }
 }
+
 .webCli,
 .webCli-input {
   font: 20px/20px 'Lucida Console', 'Consolas', 'Courier New' !important;
@@ -11,320 +14,109 @@ body {
   background-color: #f00 !important;
 }
 .webCli {
-  z-index: 1000;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.85);
   height: 300px;
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 5px;
+  // padding: 5px;
+  padding: 0;
+  margin: 0;
   border: solid 1px rgba(255, 255, 255, 0.5);
   box-shadow: 0 0 3px #000, 0 0 8px #000 inset;
   overflow: auto;
+  outline: none;
 }
 
 .webCli-input {
+  display: inline-block;
   background: transparent;
   border: none;
-  width: 0px;
   color: #8ae234;
   margin: 0;
   padding: 0;
   outline: none; /* Chrome */
 }
 
-.webCli-span {
-  //display: block;
-  color: #8ae234;
-  margin: 0;
-  padding: 0;
-  outline: none; /* Chrome */
-}
-
-.webCli-input::-ms-clear {
-  /* Clear button in Edge */
-  display: none;
+:host /deep/ {
+  .webCli-span {
+    //display: block;
+    color: #8ae234;
+    margin: 0;
+    padding: 0;
+    outline: none; /* Chrome */
+  }
 }
 
 :host /deep/ {
   .webCli-cmd {
-    color: #aaa !important;
+    color: #aaa;
   }
   .webCli-error {
-    color: #f00;
+    color: white;
+  }
+  .webCli-red {
+    color: #ff0089;
   }
   .webCli-ok {
     color: #0ff;
   }
-}
-
-span.cursor {
-  width: 2px;
-  display: inline-block;
-  margin-left: 1px;
-
-  -webkit-animation: blink 0.5s linear 0s infinite;
-  -moz-animation: blink 0.5s linear 0s infinite;
-  -ms-animation: blink 0.5s linear 0s infinite;
-  -o-animation: blink 0.5s linear 0s infinite;
-}
-@-webkit-keyframes blink {
-  0% {
-    background: rgba(0, 255, 0, 0.5);
-  }
-  47% {
-    background: rgba(0, 255, 0, 0.5);
-  }
-  50% {
-    background: rgba(0, 0, 0, 0);
-  }
-  97% {
-    background: rgba(0, 0, 0, 0);
-  }
-  100% {
-    background: rgba(0, 0, 0, 0);
+  .webCli-version {
+    color: #ff4081;
   }
 }
 
-@-moz-keyframes blink {
-  0% {
-    background: #0a0;
-  }
-  47% {
-    background: #090;
-  }
-  50% {
-    background: #000;
-  }
-  97% {
-    background: #000;
-  }
-  100% {
-    background: #090;
-  }
-}
+/* another blinky cursor to try if mine doesnt fix. */
 
-@-ms-keyframes blink {
-  0% {
-    background: #0a0;
+:host /deep/ {
+  .cursor {
+    width: 0px;
   }
-  47% {
-    background: #090;
+  .cursor::after {
+    content: '';
+    position: relative;
+    top: 0;
+    right: 0px;
+    /* Remove display: inline-block if not required to be on the same line as text etc */
+    display: inline-block;
+    background-color: rgba(29, 245, 17, 0.5);
+    vertical-align: top;
+    width: 11px;
+    /* Set height to the line height of .text */
+    height: 18px;
+    /*
+  Animation paramaters:
+  blink = animation-name,
+  1s = animation-duration,
+  step-end = animation-timing-function,
+  infinite = animation-iteration-count
+  */
+    -webkit-animation: blink 1s step-end infinite;
+    animation: blink 1s step-end infinite;
   }
-  50% {
-    background: #000;
-  }
-  97% {
-    background: #000;
-  }
-  100% {
-    background: #090;
-  }
-}
 
-@-o-keyframes blink {
-  0% {
-    background: #0a0;
+  @-webkit-keyframes blink {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
-  47% {
-    background: #090;
-  }
-  50% {
-    background: #000;
-  }
-  97% {
-    background: #000;
-  }
-  100% {
-    background: #090;
-  }
-}
 
-@keyframes flicker {
-  0% {
-    opacity: 0.27861;
+  @keyframes blink {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
-  5% {
-    opacity: 0.34769;
-  }
-  10% {
-    opacity: 0.23604;
-  }
-  15% {
-    opacity: 0.90626;
-  }
-  20% {
-    opacity: 0.18128;
-  }
-  25% {
-    opacity: 0.83891;
-  }
-  30% {
-    opacity: 0.65583;
-  }
-  35% {
-    opacity: 0.67807;
-  }
-  40% {
-    opacity: 0.26559;
-  }
-  45% {
-    opacity: 0.84693;
-  }
-  50% {
-    opacity: 0.96019;
-  }
-  55% {
-    opacity: 0.08594;
-  }
-  60% {
-    opacity: 0.20313;
-  }
-  65% {
-    opacity: 0.71988;
-  }
-  70% {
-    opacity: 0.53455;
-  }
-  75% {
-    opacity: 0.37288;
-  }
-  80% {
-    opacity: 0.71428;
-  }
-  85% {
-    opacity: 0.70419;
-  }
-  90% {
-    opacity: 0.7003;
-  }
-  95% {
-    opacity: 0.36108;
-  }
-  100% {
-    opacity: 0.24387;
-  }
-}
-@keyframes textShadow {
-  0% {
-    text-shadow: 0.4389924193300864px 0 1px rgba(0, 30, 255, 0.5),
-      -0.4389924193300864px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  5% {
-    text-shadow: 2.7928974010788217px 0 1px rgba(0, 30, 255, 0.5),
-      -2.7928974010788217px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  10% {
-    text-shadow: 0.02956275843481219px 0 1px rgba(0, 30, 255, 0.5),
-      -0.02956275843481219px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  15% {
-    text-shadow: 0.40218538552878136px 0 1px rgba(0, 30, 255, 0.5),
-      -0.40218538552878136px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  20% {
-    text-shadow: 3.4794037899852017px 0 1px rgba(0, 30, 255, 0.5),
-      -3.4794037899852017px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  25% {
-    text-shadow: 1.6125630401149584px 0 1px rgba(0, 30, 255, 0.5),
-      -1.6125630401149584px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  30% {
-    text-shadow: 0.7015590085143956px 0 1px rgba(0, 30, 255, 0.5),
-      -0.7015590085143956px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  35% {
-    text-shadow: 3.896914047650351px 0 1px rgba(0, 30, 255, 0.5),
-      -3.896914047650351px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  40% {
-    text-shadow: 3.870905614848819px 0 1px rgba(0, 30, 255, 0.5),
-      -3.870905614848819px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  45% {
-    text-shadow: 2.231056963361899px 0 1px rgba(0, 30, 255, 0.5),
-      -2.231056963361899px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  50% {
-    text-shadow: 0.08084290417898504px 0 1px rgba(0, 30, 255, 0.5),
-      -0.08084290417898504px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  55% {
-    text-shadow: 2.3758461067427543px 0 1px rgba(0, 30, 255, 0.5),
-      -2.3758461067427543px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  60% {
-    text-shadow: 2.202193051050636px 0 1px rgba(0, 30, 255, 0.5),
-      -2.202193051050636px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  65% {
-    text-shadow: 2.8638780614874975px 0 1px rgba(0, 30, 255, 0.5),
-      -2.8638780614874975px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  70% {
-    text-shadow: 0.48874025155497314px 0 1px rgba(0, 30, 255, 0.5),
-      -0.48874025155497314px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  75% {
-    text-shadow: 1.8948491305757957px 0 1px rgba(0, 30, 255, 0.5),
-      -1.8948491305757957px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  80% {
-    text-shadow: 0.0833037308038857px 0 1px rgba(0, 30, 255, 0.5),
-      -0.0833037308038857px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  85% {
-    text-shadow: 0.09769827255241735px 0 1px rgba(0, 30, 255, 0.5),
-      -0.09769827255241735px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  90% {
-    text-shadow: 3.443339761481782px 0 1px rgba(0, 30, 255, 0.5),
-      -3.443339761481782px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  95% {
-    text-shadow: 2.1841838852799786px 0 1px rgba(0, 30, 255, 0.5),
-      -2.1841838852799786px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-  100% {
-    text-shadow: 2.6208764473832513px 0 1px rgba(0, 30, 255, 0.5),
-      -2.6208764473832513px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
-  }
-}
-.crt::after {
-  content: ' ';
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background: rgba(18, 16, 16, 0.1);
-  opacity: 0;
-  z-index: 2;
-  pointer-events: none;
-  animation: flicker 0.15s infinite;
-}
-.crt::before {
-  content: ' ';
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
-    linear-gradient(
-      90deg,
-      rgba(255, 0, 0, 0.06),
-      rgba(0, 255, 0, 0.02),
-      rgba(0, 0, 255, 0.06)
-    );
-  z-index: 2;
-  background-size: 100% 2px, 3px 100%;
-  pointer-events: none;
-}
-.crt {
-  animation: textShadow 1.6s infinite;
 }

@@ -1,36 +1,21 @@
+import { HttpClient } from '@angular/common/http';
 import {
   Component,
-  NgModule,
-  Input,
-  ComponentFactory,
-  ComponentRef,
-  ComponentFactoryResolver,
-  ViewContainerRef,
-  ChangeDetectorRef,
-  ViewChild,
-  TemplateRef,
-  Output,
-  EventEmitter,
-  OnInit,
-  OnDestroy,
-  AfterContentInit,
-  HostListener,
   ElementRef,
+  EventEmitter,
+  HostListener,
+  OnInit,
+  ViewChild,
 } from '@angular/core';
-
-import { HttpClient } from '@angular/common/http';
-
-import { DynoComponent } from './shared/components/dyno/dyno.component';
-import { ButtonInterface } from './shared/components/dyno/mites/button/button.interface';
+import { Subject } from 'rxjs';
 import {
-  ButtonTypes,
   ButtonColors,
+  ButtonTypes,
 } from './shared/components/dyno/mites/button/button.enum';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { ButtonInterface } from './shared/components/dyno/mites/button/button.interface';
 
 @Component({
   selector: 'app-root',
-  // host: { '(window:keydown)': 'hotkeys($event)' },
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
@@ -38,33 +23,29 @@ export class AppComponent implements OnInit {
   @ViewChild('webCli') webCli: ElementRef;
   myButtons: ButtonInterface[];
   results = '';
-  public consoleActive = true;
+  public consoleActive = false;
   focusInput: EventEmitter<boolean> = new EventEmitter();
+
+  public webCliState$ = new Subject();
 
   @HostListener('window:keyup', ['$event'])
   onKeyUp(event: KeyboardEvent) {
-    // console.log(event.keyCode, event);
     if (event.ctrlKey && event.altKey && event.keyCode === 220) {
       this.consoleActive = !this.consoleActive;
       if (this.consoleActive) {
-        // console.log(this.webCli.cmdPrompt); //.cmdPrompt.nativeElement.focus();
-        // setTimeout(() => {
-        //   this.webCli.cmdPrompt.nativeElement.focus();
-        // }, 0);
+        this.webCliState$.next(1);
+      } else {
+        this.webCliState$.next(2);
       }
     }
   }
 
   constructor(private http: HttpClient) {}
 
-  showMessage() {
-    alert('Hotkey Test');
-  }
-
   ngOnInit(): void {
-    this.http.get('http://localhost:3000/myData').subscribe((data) => {
-      // console.log(data);
-    });
+    // this.http.get('http://localhost:3000/myData').subscribe((data) => {
+    // console.log(data);
+    // });
 
     this.myButtons = [
       {

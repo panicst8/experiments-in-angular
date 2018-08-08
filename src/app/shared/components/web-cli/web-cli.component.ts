@@ -1,34 +1,71 @@
 import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import {
   Component,
   ElementRef,
+  Host,
   Input,
   OnInit,
   Renderer2,
   ViewChild,
 } from '@angular/core';
+import * as _ from 'lodash';
+import { AppComponent } from '../../../app.component';
 
 @Component({
   selector: 'app-web-cli',
   templateUrl: './web-cli.component.html',
   styleUrls: ['./web-cli.component.scss'],
+  animations: [
+    trigger('changeState', [
+      state(
+        'state1',
+        style({
+          height: '300px',
+          // opacity: 0,
+          // backgroundColor: 'green',
+          // transform: 'scale(-1)',
+        })
+      ),
+      state(
+        'state2',
+        style({
+          height: '0px',
+          // opacity: 1,
+          // backgroundColor: 'red',
+          // transform: 'scale(1)',
+        })
+      ),
+      transition('*=>state1', animate('100ms')),
+      transition('*=>state2', animate('100ms')),
+    ]),
+  ],
 })
 export class WebCliComponent implements OnInit {
   @ViewChild('cmdPrompt') cmdPromptElement: ElementRef;
   @ViewChild('cmdPromptOutputDiv') cmdPromptOutputDivElement: ElementRef;
   @ViewChild('fakeInput') fakeInput: ElementRef;
-  @Input() consoleActive;
   @Input()
   set setProp(p: boolean) {
-    console.log(p);
     setTimeout(() => {
       this.cmdPromptControls('focus');
     }, 0);
   }
 
+  @Input() webCliState$;
+
+  public currentState = 'state2';
+
   private history = [];
   public cmdOffSet = (function() {
     let offset = 0;
     return function(adjustment = 0) {
+      console.log(offset);
       if (adjustment === -42) {
         offset = 0;
       } else {
@@ -40,28 +77,45 @@ export class WebCliComponent implements OnInit {
   private validCommands = new Set(['CLS', 'CLEAR', 'ENV', 'IMG', 'VIDEO']);
 
   private logStyle = function(cmd) {
-    return this.validCommands.has(cmd) ? 'cmd' : 'ok';
+    return this.validCommands.has(cmd.toUpperCase()) ? 'cmd' : 'ok';
   };
 
-  constructor(private el: ElementRef, private _renderer: Renderer2) {}
+  constructor(
+    @Host() parent: AppComponent,
+    private el: ElementRef,
+    private _renderer: Renderer2
+  ) {}
 
   ngOnInit() {
     this.showGreeting();
+    this.webCliState$.subscribe((curState) => {
+      if (curState === 1) {
+        this.cmdPromptControls('focus');
+      }
+      this.currentState = 'state' + curState;
+      console.log('state value: ', curState);
+    });
+  }
+
+  toggleState() {
+    if (this.currentState === 'state1') {
+      this.currentState = 'state2';
+    } else {
+      this.currentState = 'state1';
+    }
   }
 
   otherKey(keyPress: KeyboardEvent) {
-    console.log(keyPress);
     if (keyPress.key === 'ArrowUp') {
+      keyPress.preventDefault();
       this.browseHistory(+1);
-      console.log('up up');
     } else if (keyPress.key === 'ArrowDown') {
-      console.log('down down');
+      keyPress.preventDefault();
       this.browseHistory(-1);
     } else {
-      console.log(keyPress.key);
+      // console.log(keyPress.key);
     }
-    //  (keyup.arrowup)="browseHistory(+1)" (keyup.arrowdown)="browseHistory(-1);"
-    //   (keyup.enter)="readyCommand($event)">
+
     if (
       keyPress.key === 'Alt' ||
       keyPress.key === 'Control' ||
@@ -73,8 +127,6 @@ export class WebCliComponent implements OnInit {
 
     if (keyPress.key === 'Enter') {
       this.readyCommand(this.fakeInput.nativeElement.innerText);
-      console.log('Try Command: ', this.fakeInput.nativeElement.innerText);
-      this.fakeInput.nativeElement.innerText = '';
     } else if (keyPress.key === 'Backspace') {
       this.fakeInput.nativeElement.innerText = this.fakeInput.nativeElement.innerText.slice(
         0,
@@ -83,9 +135,8 @@ export class WebCliComponent implements OnInit {
     } else if (this.validKey(keyPress.keyCode)) {
       this.fakeInput.nativeElement.innerText =
         this.fakeInput.nativeElement.innerText + keyPress.key;
-      console.log('should add: ', keyPress, keyPress.key);
     } else {
-      console.log('other key: ', keyPress, keyPress.key);
+      // console.log('other key: ', keyPress, keyPress.key);
     }
   }
 
@@ -98,27 +149,40 @@ export class WebCliComponent implements OnInit {
       (keyCode > 95 && keyCode < 112) || // numpad keys
       (keyCode > 185 && keyCode < 193) || // ;=,-./` (in order)
       (keyCode > 218 && keyCode < 223); // [\]' (in order)
-    console.log(keyCode, isValid);
     return isValid;
   }
 
   readyCommand(command: string) {
     command = String(command).trim();
-    this.cmdOffSet(-42);
-    this.cmdPromptControls('clear');
-    this.writeLine(command, this.logStyle(command));
-    // this.writeLine(command, 'input');
 
     if (command === '') {
+      this.cmdPromptOutputDivElement.nativeElement.appendChild(
+        this.promptCopy('')
+      );
+      this.newLine();
       return;
     }
 
-    this.history.push(command);
+    this.cmdOffSet(-42);
+    this.cmdPromptControls('clear');
+    this.writeLine(command, null, true);
+
+    if (command === '') {
+      this.cmdPromptOutputDivElement.nativeElement.appendChild(
+        this.promptCopy('')
+      );
+      return;
+    }
+
+    this.fakeInput.nativeElement.innerText = '';
+
+    if (_.last(this.history) !== command) {
+      this.history.push(command);
+    }
 
     const tokens = this.getArgs(command);
 
-    // const tokens = command.split(' ');
-    const cmd = tokens.shift().toUpperCase();
+    const cmd = tokens.shift();
     this.executeCommand(cmd, tokens);
   }
 
@@ -135,7 +199,7 @@ export class WebCliComponent implements OnInit {
   }
 
   executeCommand(cmd, tokens) {
-    switch (cmd) {
+    switch (cmd.toUpperCase()) {
       case 'CLS':
       case 'CLEAR':
         this.CLS();
@@ -149,6 +213,8 @@ export class WebCliComponent implements OnInit {
       case 'VIDEO':
         this.VIDEO();
         break;
+      default:
+        this.writeLine(`command not found: ${cmd}`, 'error');
     }
   }
 
@@ -159,21 +225,21 @@ export class WebCliComponent implements OnInit {
 
   IMG() {
     this.writeHTML(
-      `<img height='200px' width='250px'
+      `<br><img height='200px' width='250px'
        src="https://ip1gh35mejw4dpqjl4aya71p-wpengine.netdna-ssl.com/wp-content/uploads/2016/02/analytics-meme-sword-guy.png"/>`
     );
   }
 
   VIDEO() {
-    this.writeHTML(`<iframe width="200" height="200"
+    this.writeHTML(`<br><iframe width="200" height="200"
      src="https://www.youtube-nocookie.com/embed/hyC_3HHz13I?rel=0&amp&controls=0&showinfo=0&modestbranding=1&showinfo=0&rel=0"
     frameborder="0" allow="autoplay; encrypted-media"
      ></iframe>`);
   }
 
   ENV() {
-    console.log(this);
-    this.cmdPromptOutputDivElement.nativeElement.innerHTML = this;
+    // this.cmdPromptOutputDivElement.nativeElement.innerHTML = this;
+    console.log('this: ', this);
   }
 
   browseHistory(adjustment) {
@@ -190,7 +256,6 @@ export class WebCliComponent implements OnInit {
 
     this.cmdOffSet(adjustment);
 
-    // this.cmdPromptElement.nativeElement.value = this.history[
     this.fakeInput.nativeElement.innerText = this.history[
       this.history.length - this.cmdOffSet()
     ];
@@ -199,29 +264,58 @@ export class WebCliComponent implements OnInit {
   cmdPromptControls(action) {
     switch (action) {
       case 'focus':
-        console.log('why you no focus?');
-        this.cmdPromptElement.nativeElement.focus();
+        setTimeout(() => this.cmdPromptElement.nativeElement.focus(), 0);
         break;
       case 'clear':
-        this.cmdPromptElement.nativeElement.value = '';
+        this.fakeInput.nativeElement.innerText = '';
         break;
     }
   }
 
   scrollToBottom() {
-    this.cmdPromptOutputDivElement.nativeElement.scrollTop = this.cmdPromptOutputDivElement.nativeElement.scrollHeight;
+    this.cmdPromptElement.nativeElement.scrollTop = this.cmdPromptElement.nativeElement.scrollHeight;
   }
 
   newLine() {
     const newLine = document.createElement('br');
     this.cmdPromptOutputDivElement.nativeElement.appendChild(newLine);
+    this.scrollToBottom();
   }
 
-  writeLine(txt, cssSuffix = 'ok') {
+  promptCopy(cmd: string) {
     const span = document.createElement('span');
-    span.className = `webCli-${cssSuffix}`;
+    const spanWrapper = document.createElement('span');
+    spanWrapper.className = `PROMPT1`;
+    spanWrapper.innerHTML = '$ ';
+    span.className = 'webCli-span';
+    span.innerText = cmd;
+    spanWrapper.appendChild(span);
+    return spanWrapper;
+  }
+
+  writeLine(
+    txt,
+    cssSuffix: string = 'ok',
+    isoldCommandPrompt: boolean = false
+  ) {
+    const span = document.createElement('span');
     span.innerText = txt;
-    this.cmdPromptOutputDivElement.nativeElement.appendChild(span);
+
+    if (isoldCommandPrompt) {
+      this.cmdPromptOutputDivElement.nativeElement.appendChild(
+        this.promptCopy(txt)
+      );
+    } else if (cssSuffix === 'error') {
+      const spanWrapper = document.createElement('span');
+      spanWrapper.className = `webCli-red`;
+      spanWrapper.innerHTML = 'webCli: ';
+      spanWrapper.appendChild(span);
+      span.className = `webCli-${cssSuffix}`;
+      this.cmdPromptOutputDivElement.nativeElement.appendChild(spanWrapper);
+    } else {
+      span.className = `webCli-${cssSuffix}`;
+      this.cmdPromptOutputDivElement.nativeElement.appendChild(span);
+    }
     this.newLine();
   }
 
@@ -233,7 +327,7 @@ export class WebCliComponent implements OnInit {
   }
 
   showGreeting() {
-    this.writeLine('Web CLI [Version 0.0.1]', 'cmd');
+    this.writeLine('Web CLI [Version 0.0.1]', 'version');
     this.newLine();
   }
 }

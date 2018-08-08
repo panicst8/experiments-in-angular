@@ -1,7 +1,9 @@
-<div #cmdPrompt tabindex="0" class="webCli" (keydown)="otherKey($event)">
-  <pre><div #cmdPromptOutputDiv class="webCli-output"></div></pre>
-  <div>
-    <pre><span class="PROMPT1">$</span> <span #fakeInput class="webCli-span"></span><span class="cursor"> </span>
-    </pre>
+<div #cmdPrompt tabindex="0" [@changeState]="currentState" class="webCli" (keydown)="otherKey($event)">
+  <div #cmdPromptOutputDiv class="webCli-output"></div>
+  <div class="webCli-input">
+    <span class="PROMPT1">$&nbsp;</span>
+    <span #fakeInput class="webCli-span"></span>
+    <span class="cursor"></span>
   </div>
 </div>
+<button (click)="toggleState()">toggle</button>
